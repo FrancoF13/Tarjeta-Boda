@@ -1,19 +1,5 @@
 {
   "name": "tarjeta-invitacion-boda",
   "version": "1.0.0",
-  "description": "Invitación Digital de Boda en Blanco y Dusty Blue con Sobre 3D",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "build": "echo 'Build complete'"
-  },
-  "keywords": [
-    "wedding",
-    "invitation",
-    "dusty-blue",
-    "boda"
-  ],
-  "author": "",
-  "license": "MIT"
+  "private": true
 }
