@@ -69,18 +69,31 @@ html {
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-dusty-blue-light);
+  color: var(--dusty-blue-deep);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* CAPA DE FONDO FIJA ACELERADA POR GPU (CERO REPAINTS EN SCROLL) */
+.bg-fixed-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-dusty-blue-light);
   background-image: 
     radial-gradient(circle at 50% 0%, #b2cee1 0%, #c8dded 35%, #e1edf6 100%),
     radial-gradient(circle at 8% 22%, #a8c7db 0%, transparent 45%),
     radial-gradient(circle at 92% 38%, #a1c2d8 0%, transparent 45%),
     radial-gradient(circle at 14% 68%, #abcbdf 0%, transparent 50%),
     radial-gradient(circle at 86% 88%, #9ebdcf 0%, transparent 50%);
-  background-attachment: fixed;
-  color: var(--dusty-blue-deep);
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  line-height: 1.6;
+  pointer-events: none;
+  z-index: -2;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
 /* DESTELLOS DE LUZ Y PARTÍCULAS */
@@ -104,8 +117,9 @@ body::before {
   background-size: 250px 250px;
   opacity: 0.65;
   pointer-events: none;
-  z-index: 1;
-  animation: twinkleBg 6s ease-in-out infinite alternate;
+  z-index: -1;
+  transform: translate3d(0, 0, 0);
+  animation: twinkleBg 8s ease-in-out infinite alternate;
 }
 
 @keyframes twinkleBg {
@@ -634,40 +648,92 @@ body::before {
 .card-stationery {
   background: var(--bg-card-pure-white);
   border-radius: var(--radius-lg);
-  box-shadow: var(--card-shadow);
-  border: 2px solid var(--dusty-blue-medium-tone);
+  box-shadow: 0 18px 45px rgba(22, 44, 61, 0.12), 0 4px 14px rgba(70, 112, 145, 0.15);
+  border: 1.5px solid var(--dusty-blue-border);
   position: relative;
-  padding: 9px;
+  padding: 10px;
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
 }
 
 .card-stationery:hover {
+  transform: translateY(-4px) translate3d(0, 0, 0);
   border-color: var(--dusty-blue-primary);
-  box-shadow: 0 26px 65px rgba(22, 44, 61, 0.2), 0 6px 20px rgba(70, 112, 145, 0.25);
+  box-shadow: 0 24px 60px rgba(22, 44, 61, 0.18), 0 8px 24px rgba(70, 112, 145, 0.22);
 }
 
 /* Marco interior artesanal blanco con filete Dusty Blue y Oro */
 .card-inner-frame {
   width: 100%;
   height: 100%;
-  border: 1.5px solid var(--dusty-blue-border);
+  border: 1.5px solid rgba(70, 112, 145, 0.65);
   border-radius: calc(var(--radius-lg) - 6px);
-  padding: 34px 22px;
+  padding: 36px 22px;
   text-align: center;
   position: relative;
   background: #ffffff;
-  box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4.5px rgba(197, 165, 114, 0.35);
+  box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4.5px rgba(197, 165, 114, 0.45);
 }
 
-/* Shimmer dorado en titulares */
+/* Ornamentos dorados sutiles en las esquinas */
+.card-inner-frame::before {
+  content: '✦';
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-size: 0.72rem;
+  color: var(--gold-primary);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.card-inner-frame::after {
+  content: '✦';
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 0.72rem;
+  color: var(--gold-primary);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Shimmer dorado en titulares: pasa 2 veces con destello vivo y reposa en un oro radiante y nítido */
+@keyframes goldFoilGleam {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .foil-shimmer {
   position: relative;
-  background: var(--gold-gradient);
+  background: linear-gradient(
+    120deg,
+    #7d5519 0%,
+    #b88e4c 18%,
+    #e8cc8e 35%,
+    #fff4d4 48%,
+    #ffd98b 54%,
+    #ba9048 70%,
+    #7d5519 85%,
+    #caa360 94%,
+    #61400e 100%
+  );
+  background-size: 260% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: goldFoilGleam 2.8s ease-in-out 2 forwards;
+  display: inline-block;
 }
 
 /* =========================================================
@@ -702,7 +768,7 @@ body::before {
   font-size: 5.6rem;
   line-height: 1.05;
   margin: 4px 0 14px;
-  filter: drop-shadow(0 1px 1px #ffffff) drop-shadow(0 3px 8px rgba(22, 44, 61, 0.25));
+  filter: drop-shadow(0 2px 8px rgba(125, 85, 25, 0.32)) drop-shadow(0 1px 2px rgba(22, 44, 61, 0.2));
 }
 
 .gold-divider {
@@ -831,19 +897,20 @@ body::before {
   width: 78px;
   height: 78px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffffff 0%, #e1eff8 100%);
-  border: 2.5px solid var(--dusty-blue-primary);
-  box-shadow: 0 0 0 3px rgba(70, 112, 145, 0.25), 0 8px 24px rgba(22, 44, 61, 0.12), inset 0 0 10px rgba(115, 155, 184, 0.25);
+  background: linear-gradient(135deg, #ffffff 0%, #f4f8fb 100%);
+  border: 2px solid var(--dusty-blue-primary);
+  box-shadow: 0 0 0 3px rgba(197, 165, 114, 0.35), 0 8px 24px rgba(22, 44, 61, 0.12), inset 0 0 10px rgba(197, 165, 114, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.25s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
 }
 
 .countdown-medallion:hover {
-  transform: scale(1.05);
+  transform: translateY(-3px) scale(1.04);
   border-color: var(--dusty-blue-accent);
-  box-shadow: 0 0 0 4px rgba(70, 112, 145, 0.4), 0 12px 28px rgba(22, 44, 61, 0.2);
+  box-shadow: 0 0 0 4px rgba(197, 165, 114, 0.55), 0 12px 28px rgba(22, 44, 61, 0.18);
 }
 
 .medallion-inner {
@@ -858,7 +925,10 @@ body::before {
   font-family: var(--font-numbers);
   font-size: 2.1rem;
   font-weight: 900;
-  color: var(--dusty-blue-deep);
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   line-height: 1;
 }
 

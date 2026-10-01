@@ -35,26 +35,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let lenis = null;
   if (typeof Lenis !== 'undefined') {
     lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 1.8,
+      touchMultiplier: 1.5,
     });
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    // Sincronizar Lenis con GSAP ScrollTrigger
-    if (window.ScrollTrigger) {
+    // Sincronización oficial de alto rendimiento entre Lenis y GSAP ScrollTrigger
+    if (window.ScrollTrigger && window.gsap) {
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add((time) => {
         lenis.raf(time * 1000);
       });
       gsap.ticker.lagSmoothing(0);
+    } else {
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
     }
   }
 
@@ -157,8 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================================
   // 4. MÚSICA DE BODA: LA MARCHA NUPCIAL (BRIDAL CHORUS - WAGNER)
-  // La canción de casamiento más icónica del mundo ("Here Comes the Bride")
-  // Sintetizada con timbre cálido de piano de cola acústico y resonancia nupcial
+  // Con timbre ceremonial de piano de cola y fanfarria de trompetas nupciales
   // =========================================================
   let audioContext = null;
   let isPlaying = false;
@@ -177,56 +176,100 @@ document.addEventListener('DOMContentLoaded', () => {
   // Secuencia de la Marcha Nupcial Tradicional (Melodía + Armonías de acompañamiento)
   const weddingMarchSteps = [
     // Frase 1: "Tan, tan-ta-ran!"
-    { mel: N.D4,  dur: 0.38, chord: [N.G2, N.D3], vel: 0.08 },
-    { mel: N.G4,  dur: 0.72, chord: [N.G3, N.B3, N.D4], vel: 0.12 },
-    { mel: N.G4,  dur: 0.24, chord: [], vel: 0.07 },
-    { mel: N.G4,  dur: 0.65, chord: [N.D3, N.G3, N.B3], vel: 0.09 },
+    { mel: N.D4,  dur: 0.38, chord: [N.G2, N.D3], vel: 0.09 },
+    { mel: N.G4,  dur: 0.72, chord: [N.G3, N.B3, N.D4], vel: 0.13 },
+    { mel: N.G4,  dur: 0.24, chord: [], vel: 0.08 },
+    { mel: N.G4,  dur: 0.65, chord: [N.D3, N.G3, N.B3], vel: 0.10 },
 
     // Frase 2: "Tan, tan-ta-ran!"
-    { mel: N.D4,  dur: 0.38, chord: [N.D3, N.Fs3], vel: 0.08 },
-    { mel: N.A4,  dur: 0.72, chord: [N.D3, N.A3, N.Fs4], vel: 0.12 },
-    { mel: N.Fs4, dur: 0.24, chord: [], vel: 0.07 },
-    { mel: N.G4,  dur: 0.95, chord: [N.G2, N.G3, N.B3], vel: 0.11 },
+    { mel: N.D4,  dur: 0.38, chord: [N.D3, N.Fs3], vel: 0.09 },
+    { mel: N.A4,  dur: 0.72, chord: [N.D3, N.A3, N.Fs4], vel: 0.13 },
+    { mel: N.Fs4, dur: 0.24, chord: [], vel: 0.08 },
+    { mel: N.G4,  dur: 0.95, chord: [N.G2, N.G3, N.B3], vel: 0.12 },
 
     // Frase 3: Ascenso melódico nupcial
-    { mel: N.D4,  dur: 0.36, chord: [N.G2, N.D3], vel: 0.08 },
-    { mel: N.G4,  dur: 0.44, chord: [N.G3, N.B3], vel: 0.09 },
-    { mel: N.B4,  dur: 0.44, chord: [N.D3, N.G3], vel: 0.10 },
-    { mel: N.D5,  dur: 0.72, chord: [N.G3, N.B3, N.G4], vel: 0.12 },
-    { mel: N.B4,  dur: 0.36, chord: [], vel: 0.08 },
+    { mel: N.D4,  dur: 0.36, chord: [N.G2, N.D3], vel: 0.09 },
+    { mel: N.G4,  dur: 0.44, chord: [N.G3, N.B3], vel: 0.10 },
+    { mel: N.B4,  dur: 0.44, chord: [N.D3, N.G3], vel: 0.11 },
+    { mel: N.D5,  dur: 0.72, chord: [N.G3, N.B3, N.G4], vel: 0.13 },
+    { mel: N.B4,  dur: 0.36, chord: [], vel: 0.09 },
 
     // Frase 4: Cadencia de resolución
-    { mel: N.G4,  dur: 0.44, chord: [N.C3, N.E3, N.G3, N.C4], vel: 0.10 },
-    { mel: N.A4,  dur: 0.44, chord: [N.D3, N.Fs3, N.A3], vel: 0.10 },
-    { mel: N.Fs4, dur: 0.44, chord: [N.D3, N.A3], vel: 0.09 },
-    { mel: N.G4,  dur: 1.45, chord: [N.G2, N.D3, N.G3, N.B3], vel: 0.12 },
+    { mel: N.G4,  dur: 0.44, chord: [N.C3, N.E3, N.G3, N.C4], vel: 0.11 },
+    { mel: N.A4,  dur: 0.44, chord: [N.D3, N.Fs3, N.A3], vel: 0.11 },
+    { mel: N.Fs4, dur: 0.44, chord: [N.D3, N.A3], vel: 0.10 },
+    { mel: N.G4,  dur: 1.45, chord: [N.G2, N.D3, N.G3, N.B3], vel: 0.13 },
 
     // Frase 5: Sección central lírica emotiva
-    { mel: N.B4,  dur: 0.44, chord: [N.G2, N.D3, N.G3], vel: 0.09 },
-    { mel: N.C5,  dur: 0.36, chord: [], vel: 0.08 },
-    { mel: N.D5,  dur: 0.72, chord: [N.G3, N.B3, N.D4], vel: 0.11 },
-    { mel: N.E5,  dur: 0.36, chord: [N.C3, N.G3, N.C4], vel: 0.10 },
-    { mel: N.D5,  dur: 0.58, chord: [N.C3, N.E3, N.G3], vel: 0.09 },
-    { mel: N.C5,  dur: 0.36, chord: [], vel: 0.08 },
-    { mel: N.B4,  dur: 0.58, chord: [N.G2, N.D3, N.G3], vel: 0.09 },
-    { mel: N.A4,  dur: 0.36, chord: [N.D3, N.Fs3, N.A3], vel: 0.08 },
-    { mel: N.G4,  dur: 1.35, chord: [N.G2, N.G3, N.B3], vel: 0.11 },
+    { mel: N.B4,  dur: 0.44, chord: [N.G2, N.D3, N.G3], vel: 0.10 },
+    { mel: N.C5,  dur: 0.36, chord: [], vel: 0.09 },
+    { mel: N.D5,  dur: 0.72, chord: [N.G3, N.B3, N.D4], vel: 0.12 },
+    { mel: N.E5,  dur: 0.36, chord: [N.C3, N.G3, N.C4], vel: 0.11 },
+    { mel: N.D5,  dur: 0.58, chord: [N.C3, N.E3, N.G3], vel: 0.10 },
+    { mel: N.C5,  dur: 0.36, chord: [], vel: 0.09 },
+    { mel: N.B4,  dur: 0.58, chord: [N.G2, N.D3, N.G3], vel: 0.10 },
+    { mel: N.A4,  dur: 0.36, chord: [N.D3, N.Fs3, N.A3], vel: 0.09 },
+    { mel: N.G4,  dur: 1.35, chord: [N.G2, N.G3, N.B3], vel: 0.12 },
 
     // Frase 6: Reprise solemne final
-    { mel: N.D4,  dur: 0.38, chord: [N.G2, N.D3], vel: 0.08 },
-    { mel: N.G4,  dur: 0.72, chord: [N.G3, N.B3, N.D4], vel: 0.12 },
-    { mel: N.G4,  dur: 0.24, chord: [], vel: 0.07 },
-    { mel: N.G4,  dur: 0.65, chord: [N.D3, N.G3, N.B3], vel: 0.09 },
-    { mel: N.D4,  dur: 0.38, chord: [N.D3, N.Fs3], vel: 0.08 },
-    { mel: N.A4,  dur: 0.72, chord: [N.D3, N.A3, N.Fs4], vel: 0.12 },
-    { mel: N.Fs4, dur: 0.24, chord: [], vel: 0.07 },
-    { mel: N.G4,  dur: 1.75, chord: [N.G2, N.D3, N.G3, N.B3, N.D4], vel: 0.13 }
+    { mel: N.D4,  dur: 0.38, chord: [N.G2, N.D3], vel: 0.09 },
+    { mel: N.G4,  dur: 0.72, chord: [N.G3, N.B3, N.D4], vel: 0.13 },
+    { mel: N.G4,  dur: 0.24, chord: [], vel: 0.08 },
+    { mel: N.G4,  dur: 0.65, chord: [N.D3, N.G3, N.B3], vel: 0.10 },
+    { mel: N.D4,  dur: 0.38, chord: [N.D3, N.Fs3], vel: 0.09 },
+    { mel: N.A4,  dur: 0.72, chord: [N.D3, N.A3, N.Fs4], vel: 0.13 },
+    { mel: N.Fs4, dur: 0.24, chord: [], vel: 0.08 },
+    { mel: N.G4,  dur: 1.75, chord: [N.G2, N.D3, N.G3, N.B3, N.D4], vel: 0.14 }
   ];
 
   let currentMarchIndex = 0;
 
-  // Sintetizador de nota con timbre acústico de piano nupcial
-  function playPianoVoice(freq, startTime, duration, velocity = 0.09) {
+  // Voz de Trompeta Nupcial (Brass Fanfare)
+  function playTrumpetVoice(freq, startTime, duration, velocity = 0.065) {
+    if (!audioContext || !isPlaying) return;
+    try {
+      const osc1 = audioContext.createOscillator();
+      const osc2 = audioContext.createOscillator();
+      const filter = audioContext.createBiquadFilter();
+      const gain = audioContext.createGain();
+
+      // Oscilador 1: Diente de sierra característico de instrumentos de metal / viento
+      osc1.type = 'sawtooth';
+      osc1.frequency.setValueAtTime(freq, startTime);
+
+      // Oscilador 2: Segundo instrumento ligeramente desafinado para dar efecto de coro/fanfarria
+      osc2.type = 'sawtooth';
+      osc2.frequency.setValueAtTime(freq, startTime);
+      osc2.detune.setValueAtTime(4.5, startTime);
+
+      // Filtro de metal: ataque brillante que abre a 2600Hz y se asienta
+      filter.type = 'lowpass';
+      filter.Q.setValueAtTime(2.0, startTime);
+      filter.frequency.setValueAtTime(700, startTime);
+      filter.frequency.linearRampToValueAtTime(2600, startTime + 0.045);
+      filter.frequency.exponentialRampToValueAtTime(1200, startTime + duration);
+
+      // Envolvente de trompeta: ataque vivo y sostenido señorial
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(velocity, startTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioContext.destination);
+
+      osc1.start(startTime);
+      osc2.start(startTime);
+      osc1.stop(startTime + duration);
+      osc2.stop(startTime + duration);
+    } catch (e) {
+      console.warn('Trumpet voice error:', e);
+    }
+  }
+
+  // Voz de Piano de Cola Acústico
+  function playPianoVoice(freq, startTime, duration, velocity = 0.08) {
     if (!audioContext || !isPlaying) return;
     try {
       const osc1 = audioContext.createOscillator();
@@ -238,18 +281,16 @@ document.addEventListener('DOMContentLoaded', () => {
       osc1.type = 'triangle';
       osc1.frequency.setValueAtTime(freq, startTime);
 
-      // Oscilador 2: Armónico sutil ligeramente desafinado para efecto acústico de cuerdas de piano
+      // Oscilador 2: Armónico sutil
       osc2.type = 'sine';
       osc2.frequency.setValueAtTime(freq * 2, startTime);
-      osc2.detune.setValueAtTime(4, startTime);
+      osc2.detune.setValueAtTime(3, startTime);
 
-      // Filtro acústico: ataque brillante que decae suavemente
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1600, startTime);
-      filter.frequency.exponentialRampToValueAtTime(750, startTime + duration);
+      filter.frequency.setValueAtTime(1500, startTime);
+      filter.frequency.exponentialRampToValueAtTime(700, startTime + duration);
       filter.Q.setValueAtTime(1.1, startTime);
 
-      // Envolvente de piano: ataque percusivo y decaimiento natural
       gain.gain.setValueAtTime(0.0001, startTime);
       gain.gain.linearRampToValueAtTime(velocity, startTime + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
@@ -264,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
       osc1.stop(startTime + duration);
       osc2.stop(startTime + duration);
     } catch (e) {
-      console.warn('Audio voice error:', e);
+      console.warn('Piano voice error:', e);
     }
   }
 
@@ -273,18 +314,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const step = weddingMarchSteps[currentMarchIndex];
     const now = audioContext.currentTime;
 
-    // 1. Tocar nota de la melodía principal
-    playPianoVoice(step.mel, now, step.dur * 1.35, step.vel);
+    // 1. Tocar melodía principal: Fusión majestuosa de Piano de cola + Toque de Trompeta nupcial
+    playPianoVoice(step.mel, now, step.dur * 1.35, step.vel * 0.75);
+    playTrumpetVoice(step.mel, now, step.dur * 1.15, step.vel * 0.55);
 
-    // 2. Tocar acordes armónicos de acompañamiento
+    // 2. Acordes armónicos de acompañamiento en piano
     if (step.chord && step.chord.length > 0) {
       step.chord.forEach((chordFreq, idx) => {
-        playPianoVoice(chordFreq, now + (idx * 0.02), step.dur * 1.5, step.vel * 0.55);
+        playPianoVoice(chordFreq, now + (idx * 0.02), step.dur * 1.5, step.vel * 0.45);
       });
     }
 
     currentMarchIndex = (currentMarchIndex + 1) % weddingMarchSteps.length;
-    // Espacio entre notas según duración
     const stepDurationMs = step.dur * 950;
     marchTimeout = setTimeout(playMarchStep, stepDurationMs);
   }
@@ -299,28 +340,37 @@ document.addEventListener('DOMContentLoaded', () => {
         audioContext.resume();
       }
       isPlaying = true;
-      musicToggleBtn.classList.add('playing');
-      musicLabel.textContent = 'Pausar';
+      if (musicToggleBtn) {
+        musicToggleBtn.classList.add('playing');
+        musicToggleBtn.setAttribute('title', 'Pausar Música');
+      }
+      if (musicLabel) musicLabel.textContent = 'Pausar';
       playMarchStep();
     } catch (e) {
-      console.warn('Web Audio error:', e);
+      console.warn('Audio play error:', e);
     }
   }
 
   function pauseMusic() {
     isPlaying = false;
     clearTimeout(marchTimeout);
-    musicToggleBtn.classList.remove('playing');
-    musicLabel.textContent = 'Música';
+    if (musicToggleBtn) {
+      musicToggleBtn.classList.remove('playing');
+      musicToggleBtn.setAttribute('title', 'Reproducir Música');
+    }
+    if (musicLabel) musicLabel.textContent = 'Música';
   }
 
-  musicToggleBtn.addEventListener('click', () => {
-    if (isPlaying) {
-      pauseMusic();
-    } else {
-      startMusic();
-    }
-  });
+  if (musicToggleBtn) {
+    musicToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isPlaying) {
+        pauseMusic();
+      } else {
+        startMusic();
+      }
+    });
+  }
 
   // =========================================================
   // 5. APERTURA 3D DEL SOBRE NUPCIAL TRÍPTICO / GATEFOLD
@@ -419,16 +469,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gsap.utils.toArray('.gsap-reveal').forEach((card) => {
       gsap.fromTo(card, 
-        { y: 40, opacity: 0, scale: 0.98 },
+        { y: 35, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          scale: 1,
-          duration: 0.9,
-          ease: 'power3.out',
+          duration: 0.8,
+          ease: 'power2.out',
+          clearProps: 'transform',
           scrollTrigger: {
             trigger: card,
-            start: 'top 88%',
+            start: 'top 90%',
             toggleActions: 'play none none none'
           }
         }
@@ -437,16 +487,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================
-  // 7. INICIALIZAR VANILLA-TILT (INCLINACIÓN 3D Y REFLEJO FOIL)
+  // 7. INCLINACIÓN SUAVE EN FOTOS POLAROID (DESKTOP)
+  // Las tarjetas principales se aceleran por GPU en CSS para 120 FPS limpios
   // =========================================================
-  if (typeof VanillaTilt !== 'undefined') {
-    VanillaTilt.init(document.querySelectorAll('.card-stationery'), {
+  if (typeof VanillaTilt !== 'undefined' && window.innerWidth > 992) {
+    VanillaTilt.init(document.querySelectorAll('.polaroid-card'), {
       max: 6,
-      speed: 400,
+      speed: 300,
       glare: true,
-      'max-glare': 0.18,
-      perspective: 1000,
-      scale: 1.01
+      'max-glare': 0.12,
+      perspective: 900,
+      scale: 1.02
     });
   }
 
