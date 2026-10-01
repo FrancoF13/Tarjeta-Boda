@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nuestra Boda | Estás Invitado a Celebrar</title>
+  <meta name="description"
+    content="Estás invitado a celebrar nuestra boda. Viernes 20 de Noviembre a las 22:00 hs. Acompáñanos a vivir una noche mágica e inolvidable.">
+  <meta property="og:title" content="Estás Invitado a Celebrar Nuestra Boda 💍">
+  <meta property="og:description"
+    content="Viernes 20 de Noviembre • 22:00 hs. Te esperamos para celebrar este momento tan especial juntos.">
+  <meta property="og:image" content="assets/wax-seal.jpg">
+  <meta name="theme-color" content="#dbe7ef">
+
+  <!-- Google Fonts de Alta Gama: Cormorant Garamond, Alex Brush, Great Vibes, Cinzel & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <!-- Dependencias de Lujo: Lenis Smooth Scroll & Swiper.js -->
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.9/dist/lenis.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Canvas de partículas y destellos de polvo estelar -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- =========================================================
+       PANTALLA DE APERTURA: SOBRE NUPCIAL 3D REALISTA (ESTILO INSTAGRAM)
+       Sobre en relieve con solapas 3D, tarjeta deslizable y sello de lacre Dusty Blue
+       ========================================================= -->
+  <div id="envelope-overlay" class="envelope-overlay">
+    <div class="envelope-3d-scene">
+      <div class="envelope-perspective-box" id="envelope-box">
+
+        <!-- Fondo del sobre -->
+        <div class="env-back"></div>
+
+        <!-- Tarjeta interior que se asoma y desliza en 3D -->
+        <div class="env-inner-card" id="env-card">
+          <div class="env-inner-deckled-border">
+            <span class="env-inner-pretitle">INVITACIÓN DE BODA</span>
+            <div class="env-rings-emblem">💍</div>
+            <h2 class="env-inner-title">Nuestra Boda</h2>
+            <div class="env-inner-divider"></div>
+            <p class="env-inner-date">20 &bull; NOVIEMBRE &bull; 2026</p>
+            <p class="env-inner-time">22:00 HS</p>
+          </div>
+        </div>
+
+        <!-- Solapas laterales y frontal inferior del sobre -->
+        <div class="env-pocket"></div>
+        <div class="env-flap-left"></div>
+        <div class="env-flap-right"></div>
+        <div class="env-flap-bottom"></div>
+
+        <!-- Solapa triangular superior abatible en 3D (rotateX) -->
+        <div class="env-top-flap" id="env-top-flap">
+          <div class="env-flap-triangle"></div>
+        </div>
+
+        <!-- Sello de Lacre Dusty Blue con Relieve Dorado -->
+        <div class="env-wax-seal" id="wax-seal-btn" title="Tocar para abrir la invitación">
+          <div class="stamp-glow"></div>
+          <img src="assets/wax-seal.jpg" alt="Sello de Lacre Nupcial" class="wax-seal-img">
+        </div>
+
+      </div>
+
+      <!-- Indicador interactivo flotante -->
+      <div class="env-prompt-container" id="env-prompt-box">
+        <button id="open-invitation-btn" class="btn-open-3d">
+          <span class="sparkle-icon">✨</span> Tocar el sello para abrir <span class="sparkle-icon">✨</span>
+        </button>
+        <p class="envelope-hint">🎵 Toca para activar la Marcha Nupcial</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTROL FLOTANTE DE MÚSICA DE ALTA FIDELIDAD -->
+  <div class="music-floating-container" id="music-container">
+    <button id="music-toggle-btn" class="music-btn" aria-label="Controlar música" title="Reproducir / Pausar Música">
+      <div class="music-disc-icon">
+        <i data-lucide="disc-3" class="icon-disc"></i>
+      </div>
+      <div class="music-bars" id="music-bars">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+        <span class="bar bar-4"></span>
+      </div>
+      <span class="music-label" id="music-label">Música</span>
+    </button>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL: SUITE NUPCIAL DE TARJETAS (ESTILO EDITORIAL INSTAGRAM) -->
+  <main class="invitation-main" id="invitation-content">
+
+    <!-- TARJETA 1: PORTADA PRINCIPAL (CON 3D TILT Y BORDE RASGADO ARTESANAL) -->
+    <header class="card-stationery card-hero gsap-reveal" data-tilt data-tilt-max="6" data-tilt-glare data-tilt-max-glare="0.2">
+      <div class="card-inner-frame">
+        <div class="card-ornament top-ornament">
+          <!-- Emblema de alianzas entrelazadas con gema dorada -->
+          <svg class="wedding-rings-icon" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="30" r="19" stroke="url(#champagneGold)" stroke-width="4.2" stroke-linecap="round" />
+            <circle cx="40" cy="30" r="19" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" />
+            <circle cx="60" cy="30" r="19" stroke="url(#champagneGold)" stroke-width="4.2" stroke-linecap="round" />
+            <circle cx="60" cy="30" r="19" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" />
+            <path d="M60 7L63 11L60 15L57 11Z" fill="#ffffff" stroke="#c5a572" stroke-width="1" />
+            <circle cx="60" cy="11" r="1.5" fill="#fdfcf0" />
+            <defs>
+              <linearGradient id="champagneGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8a6b32" />
+                <stop offset="30%" stop-color="#d8ba82" />
+                <stop offset="50%" stop-color="#fff4dc" />
+                <stop offset="70%" stop-color="#c5a572" />
+                <stop offset="100%" stop-color="#6e4f1d" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <span class="hero-invitation-lead">Estás invitado a celebrar</span>
+        <h1 class="hero-name-gold foil-shimmer">Nuestra Boda</h1>
+
+        <div class="gold-divider">
+          <span class="divider-line"></span>
+          <span class="divider-gem">✦</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Frase emotiva elegida para la boda -->
+        <div class="quote-container">
+          <div class="quote-marks">“</div>
+          <p class="quote-text">
+            Con la bendición de Dios y de nuestras familias,<br>
+            tenemos el honor y la alegría de invitarte<br>
+            a celebrar el comienzo de nuestra nueva historia.
+          </p>
+          <div class="quote-marks bottom">”</div>
+        </div>
+
+        <div class="card-monogram-badge">
+          <span>&bull; N &amp; B &bull;</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TARJETA 2: CUENTA REGRESIVA Y SAVE THE DATE -->
+    <section class="card-stationery countdown-section gsap-reveal" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.15">
+      <div class="card-inner-frame">
+        <div class="section-badge">
+          <span>TIEMPO RESTANTE</span>
+        </div>
+        <h3 class="section-title">Solo falta...</h3>
+
+        <div class="countdown-grid luxury-countdown-grid" id="countdown">
+          <div class="countdown-item">
+            <div class="countdown-medallion">
+              <div class="medallion-inner">
+                <span class="countdown-val" id="days">00</span>
+              </div>
+            </div>
+            <span class="countdown-label">DÍAS</span>
+          </div>
+          <div class="countdown-sep">✦</div>
+          <div class="countdown-item">
+            <div class="countdown-medallion">
+              <div class="medallion-inner">
+                <span class="countdown-val" id="hours">00</span>
+              </div>
+            </div>
+            <span class="countdown-label">HORAS</span>
+          </div>
+          <div class="countdown-sep">✦</div>
+          <div class="countdown-item">
+            <div class="countdown-medallion">
+              <div class="medallion-inner">
+                <span class="countdown-val" id="minutes">00</span>
+              </div>
+            </div>
+            <span class="countdown-label">MIN</span>
+          </div>
+          <div class="countdown-sep">✦</div>
+          <div class="countdown-item">
+            <div class="countdown-medallion">
+              <div class="medallion-inner">
+                <span class="countdown-val" id="seconds">00</span>
+              </div>
+            </div>
+            <span class="countdown-label">SEG</span>
+          </div>
+        </div>
+
+        <p class="countdown-target-label">Viernes 20 de Noviembre &bull; 22:00 HS</p>
+      </div>
+    </section>
+
+    <!-- TARJETA 3: FECHA Y HORA CON AGENDADOR INTELIGENTE -->
+    <section class="card-stationery event-info-card gsap-reveal" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.15">
+      <div class="card-inner-frame">
+        <div class="card-icon-header">
+          <div class="icon-circle">
+            <i data-lucide="calendar-heart" class="icon-lucide"></i>
+          </div>
+        </div>
+
+        <span class="section-pretitle">¿CUÁNDO?</span>
+        <h3 class="section-heading">FECHA Y HORA</h3>
+
+        <div class="event-highlight-box">
+          <p class="event-main-date">VIERNES 20 DE NOVIEMBRE</p>
+          <p class="event-main-time">22:00 HS</p>
+        </div>
+
+        <div class="action-buttons-group">
+          <button id="btn-agendar" class="btn-card-action btn-gold-shimmer">
+            <i data-lucide="calendar-plus" class="btn-icon"></i>
+            Agendar en mi Calendario
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA 4: CARRUSEL INTERACTIVO DE DETALLES Y DECORACIÓN (SWIPER.JS) -->
+    <section class="card-stationery gallery-section gsap-reveal">
+      <div class="card-inner-frame">
+        <span class="section-pretitle">DETALLES NUPCIALES</span>
+        <h3 class="section-heading">Nuestra Celebración</h3>
+
+        <!-- Swiper Carousel con controles táctiles (Sin personas: alianzas, decoración y ramo) -->
+        <div class="swiper wedding-swiper">
+          <div class="swiper-wrapper">
+            <!-- Slide 1: Alianzas de matrimonio sobre papel artesanal con cinta dusty blue -->
+            <div class="swiper-slide">
+              <div class="polaroid-card">
+                <div class="polaroid-img-wrapper">
+                  <img src="assets/rings-flatlay.jpg" alt="Alianzas de oro y cinta dusty blue sobre papel artesanal" loading="lazy">
+                </div>
+                <div class="polaroid-caption">
+                  <p class="caption-phrase">“Para amarnos, cuidarnos y caminar juntos toda la vida.”</p>
+                  <span class="caption-date">Alianzas de Matrimonio</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 2: Decoración nupcial con velas y flores dusty blue -->
+            <div class="swiper-slide">
+              <div class="polaroid-card">
+                <div class="polaroid-img-wrapper">
+                  <img src="assets/decor-1.jpg" alt="Ambientación floral nupcial con hortensias dusty blue y velas" loading="lazy">
+                </div>
+                <div class="polaroid-caption">
+                  <p class="caption-phrase">“Cada detalle pensado con amor para compartirlo con vos.”</p>
+                  <span class="caption-date">Ambientación Nupcial</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 3: Ramo de novia con cintas de seda dusty blue y votos -->
+            <div class="swiper-slide">
+              <div class="polaroid-card">
+                <div class="polaroid-img-wrapper">
+                  <img src="assets/bouquet-flatlay.jpg" alt="Ramo de novia con flores blancas, delphinium dusty blue y votos caligráficos" loading="lazy">
+                </div>
+                <div class="polaroid-caption">
+                  <p class="caption-phrase">“El amor nunca deja de ser.”</p>
+                  <span class="caption-date">Ramo de Novia &bull; 20.11.2026</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paginación de Swiper -->
+          <div class="swiper-pagination"></div>
+          <!-- Flechas de navegación -->
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+
+        <p class="gallery-hint">👉 Deslizá para ver más detalles</p>
+      </div>
+    </section>
+
+    <!-- TARJETA 5: CÓDIGO DE VESTIMENTA -->
+    <section class="card-stationery dresscode-card gsap-reveal" data-tilt data-tilt-max="5">
+      <div class="card-inner-frame">
+        <div class="card-icon-header">
+          <div class="icon-circle">
+            <i data-lucide="sparkles" class="icon-lucide"></i>
+          </div>
+        </div>
+
+        <span class="section-pretitle">CÓDIGO DE</span>
+        <h3 class="section-heading">VESTIMENTA</h3>
+
+        <div class="dresscode-badge">
+          <span class="dresscode-main-text">ELEGANTE</span>
+        </div>
+        <p class="dresscode-note">Vení preparado para lucirte y disfrutar de una noche mágica e inolvidable junto a nosotros.</p>
+      </div>
+    </section>
+
+    <!-- TARJETA 6: REGALOS (TU PRESENCIA ES NUESTRO MEJOR REGALO) -->
+    <section class="card-stationery gift-card gsap-reveal" data-tilt data-tilt-max="5">
+      <div class="card-inner-frame">
+        <div class="card-icon-header">
+          <div class="icon-circle heart-pulse">
+            <i data-lucide="heart-handshake" class="icon-lucide"></i>
+          </div>
+        </div>
+
+        <div class="gift-message-box">
+          <h3 class="gift-title">Tu presencia es nuestro mejor regalo</h3>
+          <p class="gift-description">
+            Compartir este sueño y dar el sí rodeados de las personas que más amamos es el recuerdo más valioso que nos llevaremos para siempre.
+          </p>
+          <div class="gift-flourish">✨ 💍 ✨</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA 7: CONFIRMAR ASISTENCIA (RSVP) & CARTEL DE ENTRADA VIP ($26.000) -->
+    <section class="card-stationery rsvp-card gsap-reveal" id="rsvp-section" data-tilt data-tilt-max="4">
+      <div class="card-inner-frame">
+        <div class="card-icon-header">
+          <div class="icon-circle">
+            <i data-lucide="message-square-heart" class="icon-lucide"></i>
+          </div>
+        </div>
+
+        <span class="section-pretitle">ES MUY IMPORTANTE</span>
+        <h3 class="section-heading">CONFIRMAR ASISTENCIA</h3>
+
+        <!-- Cartel de Entrada VIP Estilo Ticket de Colección -->
+        <div class="vip-ticket-badge">
+          <div class="ticket-cutout-top"></div>
+          <div class="ticket-cutout-bottom"></div>
+          <div class="ticket-header-tag">PASE NUPCIAL &bull; INFORMACIÓN IMPORTANTE</div>
+          <div class="ticket-body">
+            <div class="ticket-icon-box">
+              <i data-lucide="ticket" class="ticket-svg-icon"></i>
+            </div>
+            <div class="ticket-details">
+              <p class="ticket-price-line">
+                Costo de entrada: <span class="ticket-amount">$26.000</span>
+              </p>
+              <p class="ticket-deadline-line">
+                <i data-lucide="clock" class="inline-icon"></i> Fecha límite para confirmar y saldar: <strong>10 de Noviembre</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="rsvp-subtext">Por favor confirmanos antes del <strong>10 de Noviembre</strong> para poder organizar cada detalle de la celebración.</p>
+
+        <!-- Botón de apertura de formulario modal -->
+        <div class="rsvp-actions">
+          <button id="btn-open-rsvp-modal" class="btn-card-action btn-gold-shimmer">
+            <i data-lucide="check-check" class="btn-icon"></i>
+            Confirmar Asistencia
+          </button>
+        </div>
+
+        <div class="rsvp-phone-quick">
+          <p class="rsvp-quick-text">¿Querés enviar un saludo directo a los novios?</p>
+          <button id="btn-quick-greeting" class="btn-text-link">
+            Enviar cariños a los novios ✨
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA 8: PLAYLIST DE LA FIESTA -->
+    <section class="card-stationery playlist-card gsap-reveal" data-tilt data-tilt-max="5">
+      <div class="card-inner-frame">
+        <div class="card-icon-header">
+          <div class="icon-circle">
+            <i data-lucide="music-4" class="icon-lucide"></i>
+          </div>
+        </div>
+        <span class="section-pretitle">LA FIESTA LA HACEMOS JUNTOS</span>
+        <h3 class="section-heading">¿Qué canción no puede faltar?</h3>
+        <p class="playlist-subtext">¡Ayudanos a armar la playlist perfecta para bailar y celebrar toda la noche!</p>
+
+        <button id="btn-suggest-song" class="btn-card-action btn-outline">
+          <i data-lucide="headphones" class="btn-icon"></i>
+          Sugerir Canción
+        </button>
+      </div>
+    </section>
+
+    <!-- FOOTER ELEGANTE CON CAÑÓN DE CONFETI (CANVAS-CONFETTI) -->
+    <footer class="card-stationery invitation-footer gsap-reveal">
+      <div class="card-inner-frame">
+        <div class="gold-divider">
+          <span class="divider-line"></span>
+          <span class="divider-gem">✦</span>
+          <span class="divider-line"></span>
+        </div>
+        <p class="footer-family">¡Los esperamos para celebrar el amor!</p>
+        <p class="footer-hashtag">#NuestraBoda &bull; 20.11.2026</p>
+        <button id="btn-confetti" class="btn-confetti-burst" title="¡Celebrar!">
+          🎉 ¡Celebrar con Nosotros! 🎉
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- MODAL PARA AGENDAR EN CUALQUIER CALENDARIO -->
+  <div id="calendar-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="calendar-close-btn" aria-label="Cerrar modal">&times;</button>
+      <div class="modal-header">
+        <span class="modal-pretitle">NUESTRA BODA</span>
+        <h3 class="modal-title">Agendar Evento</h3>
+        <p class="modal-desc">Elegí tu calendario preferido para guardar la fecha automáticamente:</p>
+      </div>
+
+      <div class="calendar-options-list">
+        <a id="cal-link-google" href="#" target="_blank" rel="noopener noreferrer" class="calendar-option-btn">
+          <div class="cal-opt-icon">
+            <i data-lucide="calendar" class="cal-svg"></i>
+          </div>
+          <div class="cal-opt-info">
+            <strong>Google Calendar</strong>
+            <small>Recomendado para Android, Gmail y PC</small>
+          </div>
+          <span class="cal-opt-arrow">→</span>
+        </a>
+
+        <button id="cal-btn-universal-ics" class="calendar-option-btn">
+          <div class="cal-opt-icon">
+            <i data-lucide="download" class="cal-svg"></i>
+          </div>
+          <div class="cal-opt-info">
+            <strong>Apple Calendar / Outlook / Celular</strong>
+            <small>Descarga archivo universal .ics</small>
+          </div>
+          <span class="cal-opt-arrow">↓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PARA CONFIRMAR ASISTENCIA (RSVP) -->
+  <div id="rsvp-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar modal">&times;</button>
+      <div class="modal-header">
+        <span class="modal-pretitle">NUESTRA BODA</span>
+        <h3 class="modal-title">Confirmar Asistencia</h3>
+        <p class="modal-desc">Completá tus datos para avisarnos directamente por WhatsApp</p>
+      </div>
+
+      <form id="rsvp-form" class="rsvp-form">
+        <div class="form-group">
+          <label for="guest-fullname">Nombre y Apellido *</label>
+          <input type="text" id="guest-fullname" placeholder="Ej: Lucas y Florencia" required>
+        </div>
+
+        <div class="form-group">
+          <label>¿Asistirás a la boda? *</label>
+          <div class="radio-options">
+            <label class="radio-label">
+              <input type="radio" name="attendance" value="si" checked>
+              <span class="radio-custom"></span>
+              <span>¡Sí, con mucho gusto estaré presente! 💍🎉</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="attendance" value="no">
+              <span class="radio-custom"></span>
+              <span>Lamentablemente no podré asistir 💌</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="guest-message">Mensaje para los novios (Opcional)</label>
+          <textarea id="guest-message" rows="3" placeholder="¡Les deseamos toda la felicidad del mundo en esta nueva etapa!"></textarea>
+        </div>
+
+        <!-- Cartel con costo y límite en el modal -->
+        <div class="ticket-reminder-card">
+          <div class="reminder-icon">🎟️</div>
+          <div class="reminder-text">
+            <p><strong>Costo de entrada: $26.000</strong></p>
+            <small>Fecha límite para confirmar y saldar: <strong>10 de Noviembre</strong></small>
+          </div>
+        </div>
+
+        <!-- Teléfono de destino (almacenado internamente) -->
+        <input type="hidden" id="target-phone" value="5493794228227">
+
+        <button type="submit" class="btn-card-action btn-gold-shimmer btn-submit-rsvp">
+          <i data-lucide="send" class="btn-icon"></i>
+          Enviar Confirmación a WhatsApp 📲
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL PARA PEDIR CANCIÓN -->
+  <div id="song-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="song-close-btn" aria-label="Cerrar modal">&times;</button>
+      <div class="modal-header">
+        <span class="modal-pretitle">PLAYLIST DE LA BODA</span>
+        <h3 class="modal-title">Sugerir Canción</h3>
+        <p class="modal-desc">¿Qué canción no puede faltar en la fiesta para bailar?</p>
+      </div>
+
+      <form id="song-form" class="rsvp-form">
+        <div class="form-group">
+          <label for="song-guest-name">Tu Nombre</label>
+          <input type="text" id="song-guest-name" placeholder="Ej: María" required>
+        </div>
+        <div class="form-group">
+          <label for="song-title">Nombre de la canción y Artista</label>
+          <input type="text" id="song-title" placeholder="Ej: Perfect - Ed Sheeran" required>
+        </div>
+        <button type="submit" class="btn-card-action btn-gold-shimmer">
+          <i data-lucide="music" class="btn-icon"></i>
+          Enviar Sugerencia por WhatsApp 🎵
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       DEPENDENCIAS EXTERNAS DE ALTO RENDIMIENTO (CDN)
+       1. GSAP + ScrollTrigger (Animaciones fluidas y reveal)
+       2. Lenis (Smooth scroll de ultra-lujo)
+       3. Vanilla-Tilt (Efecto 3D de inclinación en tarjetas)
+       4. Swiper 11 (Carrusel táctil de fotos / Polaroid)
+       5. Canvas-Confetti (Lluvia de confeti profesional)
+       6. Lucide Icons (Iconografía SVG limpia)
+       ========================================================= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
