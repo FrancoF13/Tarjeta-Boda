@@ -1,5 +1,8 @@
 {
   "name": "tarjeta-invitacion-boda",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "jimp": "^1.6.1"
+  }
 }

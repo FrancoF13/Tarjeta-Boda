@@ -126,8 +126,10 @@ body::before {
 }
 
 /* =========================================================
-   PANTALLA DE APERTURA: SOBRE NUPCIAL 3D REALISTA
-   Sobre en tono Dusty Blue con solapas 3D y tarjeta interior Blanca
+   PANTALLA DE APERTURA: SOBRE NUPCIAL TRÍPTICO / GATEFOLD 3D
+   Inspirado en la invitación real: se abre lateralmente por los lados
+   (French Doors en 3D) y presenta la tarjeta con los datos de Elías y Adriana
+   con gran sello de lacre dorado e iniciales E y A destacadas.
    ========================================================= */
 .envelope-overlay {
   position: fixed;
@@ -140,235 +142,336 @@ body::before {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  padding: 20px;
+  padding: 16px;
   overflow: hidden;
 }
 
 .envelope-3d-scene {
-  perspective: 1400px;
+  perspective: 1600px;
   max-width: 440px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  gap: 20px;
 }
 
-.envelope-perspective-box {
+.envelope-gatefold-box {
   position: relative;
-  width: 340px;
-  height: 230px;
-  background: #739bb8;
-  border-radius: 12px;
-  box-shadow: 0 25px 65px rgba(22, 44, 61, 0.28), 0 5px 20px rgba(70, 112, 145, 0.25);
+  width: min(90vw, 360px);
+  height: min(78vh, 580px);
+  max-height: 600px;
+  border-radius: 16px;
   transform-style: preserve-3d;
-  transition: transform 0.4s ease;
+  background: #fbfbf9;
+  will-change: transform, opacity;
 }
 
-.envelope-perspective-box:hover {
-  transform: translateY(-4px) rotateX(2deg);
-}
-
-/* Fondo interior del sobre */
-.env-back {
+/* =========================================================
+   TARJETA INTERIOR CON LOS DATOS (SE PRESENTA AL ABRIR EL SOBRE)
+   ========================================================= */
+.gatefold-card-inside {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #84a6c0 0%, #688fae 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  overflow: hidden;
-}
-
-.env-back::after {
-  content: '💍';
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3.2rem;
-  opacity: 0.18;
-}
-
-/* Tarjeta interior blanca deslizable */
-.env-inner-card {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  width: 300px;
-  height: 210px;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 14px;
-  border: 1.5px solid #8ab0ce;
-  transform-origin: bottom center;
+  box-shadow: inset 0 0 0 1px #d6e2ed, 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
 }
 
-.env-inner-deckled-border {
+.inside-card-frame {
   width: 100%;
   height: 100%;
   border: 1.5px solid #467091;
-  padding: 12px 10px;
+  padding: 18px 14px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: #ffffff;
-  box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4.5px rgba(197, 165, 114, 0.4);
+  box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4.5px rgba(197, 165, 114, 0.5);
+  border-radius: 10px;
 }
 
-.env-inner-pretitle {
-  font-size: 0.65rem;
-  letter-spacing: 2.5px;
+.inside-monogram-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 18px;
+  border-radius: 999px;
+  background: var(--gold-light);
+  border: 1.2px solid rgba(197, 165, 114, 0.65);
+  box-shadow: 0 2px 8px rgba(197, 165, 114, 0.22);
+}
+
+.inside-monogram-text {
+  font-family: var(--font-cursive);
+  font-size: 1.65rem;
+  font-weight: 700;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.inside-pretitle {
+  font-size: 0.68rem;
+  letter-spacing: 3px;
   font-weight: 800;
   color: var(--dusty-blue-primary);
-  margin-bottom: 2px;
+  margin-top: 4px;
 }
 
-.env-rings-emblem {
-  font-size: 1.3rem;
-  line-height: 1;
-  margin-bottom: 2px;
-}
-
-.env-inner-title {
+.inside-names {
   font-family: var(--font-cursive);
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   line-height: 1.05;
   background: var(--gold-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  margin: 4px 0 2px;
+  filter: drop-shadow(0 2px 4px rgba(197, 165, 114, 0.25));
 }
 
-.env-inner-divider {
-  width: 60px;
-  height: 1.5px;
-  background: var(--dusty-blue-primary);
-  margin: 4px auto 6px;
+.inside-gold-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 75%;
+  margin: 2px auto 6px;
 }
 
-.env-inner-date {
+.inside-gold-divider .divider-line {
+  flex: 1;
+  height: 1.2px;
+  background: linear-gradient(90deg, transparent, #c5a572, transparent);
+}
+
+.inside-gold-divider .divider-gem {
+  color: #c5a572;
+  font-size: 0.8rem;
+}
+
+.inside-quote {
   font-family: var(--font-serif);
+  font-style: italic;
   font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--dusty-blue-deep);
+  line-height: 1.4;
+  color: var(--dusty-blue-dark);
+  margin-bottom: 6px;
 }
 
-.env-inner-time {
-  font-size: 0.74rem;
-  color: var(--dusty-blue-primary);
-  font-weight: 700;
-}
-
-/* Bolsillo y solapas frontales en Dusty Blue */
-.env-pocket {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+.inside-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
   width: 100%;
+  margin: 4px 0;
+}
+
+.inside-detail-card {
+  background: var(--dusty-blue-pastel);
+  border: 1px solid var(--dusty-blue-border);
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inside-detail-card .detail-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--dusty-blue-primary);
+  margin-bottom: 2px;
+}
+
+.inside-detail-card .detail-val {
+  font-family: var(--font-serif);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--dusty-blue-deep);
+  line-height: 1.2;
+}
+
+.inside-detail-card .detail-year {
+  font-size: 0.72rem;
+  color: var(--dusty-blue-primary);
+  font-weight: 600;
+}
+
+.inside-place-tag {
+  font-size: 0.76rem;
+  color: var(--dusty-blue-primary);
+  font-weight: 600;
+  margin: 4px 0 6px;
+}
+
+.btn-enter-suite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 18px;
+  border-radius: var(--radius-full);
+  background: var(--dusty-blue-gradient);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: 1.5px solid #ffffff;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(55, 97, 130, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-enter-suite:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(55, 97, 130, 0.55);
+}
+
+.inside-scroll-subtext {
+  font-size: 0.7rem;
+  color: var(--dusty-blue-medium-tone);
+  margin-top: 3px;
+}
+
+/* =========================================================
+   SOLAPAS LATERALES (PUERTAS TRÍPTICAS 3D QUE SE ABREN POR LOS LADOS)
+   ========================================================= */
+.gatefold-door {
+  position: absolute;
+  top: 0;
   height: 100%;
-  pointer-events: none;
+  width: 50.3%; /* Solapamiento de 0.3% para un calce milimétrico */
   z-index: 20;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
-.env-flap-left {
-  position: absolute;
-  bottom: 0;
+.gatefold-door-left {
   left: 0;
-  width: 0;
-  height: 0;
-  border-top: 115px solid transparent;
-  border-bottom: 115px solid transparent;
-  border-left: 170px solid #6c92af;
-  z-index: 21;
+  transform-origin: left center;
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  box-shadow: 4px 0 16px rgba(22, 44, 61, 0.16);
 }
 
-.env-flap-right {
-  position: absolute;
-  bottom: 0;
+.gatefold-door-right {
   right: 0;
-  width: 0;
-  height: 0;
-  border-top: 115px solid transparent;
-  border-bottom: 115px solid transparent;
-  border-right: 170px solid #638aa7;
-  z-index: 21;
+  transform-origin: right center;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  box-shadow: -4px 0 16px rgba(22, 44, 61, 0.16);
 }
 
-.env-flap-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 170px solid transparent;
-  border-right: 170px solid transparent;
-  border-bottom: 125px solid #789ebc;
-  z-index: 22;
-  filter: drop-shadow(0 -4px 10px rgba(22, 44, 61, 0.15));
-}
-
-/* Solapa triangular superior abatible en 3D */
-.env-top-flap {
+.door-front, .door-back {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 130px;
-  transform-origin: top center;
-  transform-style: preserve-3d;
-  z-index: 30;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
-.env-flap-triangle {
-  width: 0;
-  height: 0;
-  border-left: 170px solid transparent;
-  border-right: 170px solid transparent;
-  border-top: 130px solid #6c92af;
-  filter: drop-shadow(0 4px 12px rgba(22, 44, 61, 0.22));
+.door-front-left {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  background-image: url('assets/envelope-gatefold.jpg');
+  background-size: 200% 100%;
+  background-position: left center;
+  background-repeat: no-repeat;
+  border-right: 1px solid rgba(197, 165, 114, 0.35);
 }
 
-/* Sello de Lacre Nupcial Dusty Blue */
+.door-front-right {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  background-image: url('assets/envelope-gatefold.jpg');
+  background-size: 200% 100%;
+  background-position: right center;
+  background-repeat: no-repeat;
+  border-left: 1px solid rgba(197, 165, 114, 0.35);
+}
+
+.door-back {
+  background: #fdfbf7;
+  transform: rotateY(180deg) translate3d(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 25px rgba(197, 165, 114, 0.12);
+}
+
+.door-back-left {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  border-right: 1.5px solid rgba(197, 165, 114, 0.4);
+}
+
+.door-back-right {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border-left: 1.5px solid rgba(197, 165, 114, 0.4);
+}
+
+/* =========================================================
+   SELLO DE LACRE ORIGINAL CORTADO CON LAS LETRAS EXACTAS E & A
+   ========================================================= */
 .env-wax-seal {
   position: absolute;
-  top: 118px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 108px;
-  height: 108px;
-  border-radius: 50%;
+  width: 140px;
+  height: 140px;
   cursor: pointer;
   z-index: 40;
-  box-shadow: 0 12px 30px rgba(22, 44, 61, 0.35);
-  border: 2.5px solid rgba(255, 255, 255, 0.9);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 14px 28px rgba(22, 44, 61, 0.42));
 }
 
 .env-wax-seal:hover {
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: translate(-50%, -50%) scale(1.05);
+  transition: transform 0.25s ease;
+}
+
+.wax-seal-real-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: contrast(1.06) brightness(1.02);
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .stamp-glow {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 120%;
-  height: 120%;
+  width: 135%;
+  height: 135%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(115, 155, 184, 0.45) 45%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(212, 175, 98, 0.45) 45%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   animation: pulseGlow 2.5s ease-in-out infinite;
@@ -376,19 +479,10 @@ body::before {
 
 @keyframes pulseGlow {
   0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.18); opacity: 1; }
 }
 
-.wax-seal-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.36);
-  border-radius: 50%;
-  display: block;
-}
-
-/* Botón indicador inferior */
+/* Indicador flotante inferior */
 .env-prompt-container {
   text-align: center;
   width: 100%;
@@ -427,6 +521,16 @@ body::before {
   color: var(--dusty-blue-accent);
   margin-top: 10px;
   font-weight: 600;
+}
+
+.hero-subbadge-caps {
+  display: inline-block;
+  font-size: 0.76rem;
+  letter-spacing: 3px;
+  font-weight: 800;
+  color: var(--dusty-blue-primary);
+  margin-top: 2px;
+  margin-bottom: 8px;
 }
 
 /* =========================================================
@@ -654,12 +758,34 @@ body::before {
 }
 
 .card-monogram-badge {
-  margin-top: 14px;
-  font-family: var(--font-numbers);
-  font-size: 0.8rem;
-  letter-spacing: 4px;
-  color: var(--dusty-blue-primary);
-  font-weight: 700;
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 26px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(251, 245, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(246, 236, 218, 0.95) 100%);
+  border: 1.5px solid rgba(197, 165, 114, 0.65);
+  box-shadow: 0 6px 18px rgba(197, 165, 114, 0.22);
+}
+
+.card-monogram-badge .monogram-text {
+  font-family: var(--font-numbers); /* Cinzel */
+  font-size: 1.85rem; /* Letras notablemente más grandes */
+  letter-spacing: 5px;
+  font-weight: 800;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  display: inline-block;
+}
+
+.card-monogram-badge .monogram-bullet {
+  color: var(--gold-primary);
+  font-size: 1.15rem;
 }
 
 /* =========================================================

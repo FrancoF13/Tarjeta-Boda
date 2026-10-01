@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. CONFIGURACIÓN DEL EVENTO
   // =========================================================
   const EVENT_CONFIG = {
-    title: 'Nuestra Boda',
+    title: 'Boda de Elías & Adriana',
+    couplesNames: 'Elías & Adriana',
     // Viernes 20 de Noviembre de 2026 a las 22:00hs (Mes 10 es Noviembre en JS)
     date: new Date(2026, 10, 20, 22, 0, 0),
     whatsappDefault: '5493794228227',
@@ -113,8 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentOpacity = Math.max(0.15, this.opacity * (0.6 + 0.4 * Math.sin(this.pulse)));
       ctx.save();
       ctx.fillStyle = this.baseColor + currentOpacity + ')';
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = 'rgba(197, 165, 114, 0.6)';
 
       if (this.isStar) {
         const s = this.size * 1.8;
@@ -324,67 +323,88 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================
-  // 5. APERTURA 3D DEL SOBRE NUPCIAL CON GSAP (ESTILO INSTAGRAM)
+  // 5. APERTURA 3D DEL SOBRE NUPCIAL TRÍPTICO / GATEFOLD
+  // Se abre lateralmente por los lados revelando los datos de Elías y Adriana
   // =========================================================
   const envelopeOverlay = document.getElementById('envelope-overlay');
   const waxSealBtn = document.getElementById('wax-seal-btn');
   const openEnvelopeBtn = document.getElementById('open-invitation-btn');
+  const btnEnterSuite = document.getElementById('btn-enter-suite');
+  const doorLeft = document.getElementById('door-left');
+  const doorRight = document.getElementById('door-right');
+  const gatefoldCardInside = document.getElementById('gatefold-card-inside');
+  const envPromptBox = document.getElementById('env-prompt-box');
   let isEnvelopeOpened = false;
 
   function trigger3DEnvelopeOpen() {
     if (isEnvelopeOpened) return;
     isEnvelopeOpened = true;
 
-    // Iniciar música
+    // Iniciar música de boda
     startMusic();
-
-    // Lanzar ráfagas de confeti con canvas-confetti
-    launchRoyalConfetti();
 
     if (window.gsap) {
       const tl = gsap.timeline();
 
-      // 1. Sello de lacre salta y se desvanece suavemente
+      // 1. Ocultar indicador inferior de inmediato
+      if (envPromptBox) {
+        tl.to(envPromptBox, {
+          opacity: 0,
+          y: 8,
+          duration: 0.2,
+          ease: 'power2.out',
+          onComplete: () => {
+            envPromptBox.style.pointerEvents = 'none';
+          }
+        });
+      }
+
+      // 2. Sello de lacre salta suavemente y se desvanece
       tl.to('#wax-seal-btn', {
-        scale: 1.25,
+        scale: 1.15,
         opacity: 0,
         y: -15,
-        duration: 0.45,
+        duration: 0.25,
         ease: 'power2.out'
-      })
-      // 2. Solapa triangular superior se rebate en 3D (180 grados hacia arriba)
-      .to('#env-top-flap', {
-        rotateX: 180,
-        duration: 0.75,
+      }, '-=0.1')
+      // 3. Las solapas laterales se abren suavemente hacia los lados en 3D
+      .to('#door-left', {
+        rotateY: -105,
+        duration: 0.65,
         ease: 'power2.inOut'
-      }, '-=0.2')
-      // 3. Tarjeta interior se desliza hacia arriba saliendo del sobre
-      .to('#env-card', {
-        y: -230,
-        scale: 1.04,
-        zIndex: 50,
-        duration: 0.85,
-        ease: 'power3.out'
-      }, '-=0.35')
-      // 4. Todo el sobre se eleva con zoom suave y da paso a la suite nupcial
+      }, '-=0.15')
+      .to('#door-right', {
+        rotateY: 105,
+        duration: 0.65,
+        ease: 'power2.inOut'
+      }, '<')
+      // 4. Se desvanece directamente a la pantalla con todos los datos
       .to('#envelope-overlay', {
         opacity: 0,
-        scale: 1.06,
-        duration: 0.8,
-        delay: 0.2,
+        duration: 0.45,
         ease: 'power2.inOut',
         onComplete: () => {
           envelopeOverlay.style.display = 'none';
-          // Disparar animaciones de revelado de las tarjetas en la página principal
+          // Revelar suite nupcial con los datos completos
           revealMainCards();
+          // Lanzar confeti triunfal justo al ingresar a los datos
+          launchRoyalConfetti();
         }
-      });
+      }, '-=0.35');
     } else {
       // Fallback simple si GSAP tardara en responder
-      envelopeOverlay.style.opacity = '0';
+      if (doorLeft) doorLeft.style.transform = 'rotateY(-105deg)';
+      if (doorRight) doorRight.style.transform = 'rotateY(105deg)';
+      if (waxSealBtn) waxSealBtn.style.opacity = '0';
+      if (envPromptBox) envPromptBox.style.display = 'none';
       setTimeout(() => {
-        envelopeOverlay.style.display = 'none';
-      }, 700);
+        envelopeOverlay.style.opacity = '0';
+        setTimeout(() => {
+          envelopeOverlay.style.display = 'none';
+          revealMainCards();
+          launchRoyalConfetti();
+        }, 400);
+      }, 500);
     }
   }
 
@@ -499,8 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const startTime = '20261121T010000Z'; // UTC (20 Nov 22hs ARG)
   const endTime = '20261121T080000Z';
-  const calTitle = encodeURIComponent('Nuestra Boda 💍');
-  const calDesc = encodeURIComponent('Estás invitado a celebrar nuestra boda. ¡Te esperamos para compartir una noche inolvidable!');
+  const calTitle = encodeURIComponent('Boda de Elías & Adriana 💍');
+  const calDesc = encodeURIComponent('Estás invitado a celebrar la boda de Elías y Adriana. Viernes 20 de Noviembre a las 22:00 hs. ¡Te esperamos!');
 
   calLinkGoogle.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startTime}/${endTime}&details=${calDesc}`;
 
@@ -526,11 +546,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const icsContent = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//Invitacion Nuestra Boda//ES',
+      'PRODID:-//Invitacion Boda Elias y Adriana//ES',
       'CALSCALE:GREGORIAN',
       'BEGIN:VEVENT',
-      'SUMMARY:Nuestra Boda 💍',
-      'DESCRIPTION:Estás invitado a celebrar nuestra boda. ¡Te esperamos para compartir una noche inolvidable!',
+      'SUMMARY:Boda de Elías & Adriana 💍',
+      'DESCRIPTION:Estás invitado a celebrar la boda de Elías y Adriana. ¡Te esperamos para compartir una noche mágica e inolvidable!',
       'DTSTART:20261121T010000Z',
       'DTEND:20261121T080000Z',
       'STATUS:CONFIRMED',
@@ -541,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', 'nuestra_boda.ics');
+    link.setAttribute('download', 'boda_elias_y_adriana.ics');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -581,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnQuickGreeting.addEventListener('click', () => {
       const rawPhone = targetPhoneInput ? targetPhoneInput.value.replace(/\D/g, '') : EVENT_CONFIG.whatsappDefault;
       const phone = rawPhone || EVENT_CONFIG.whatsappDefault;
-      const greetingMsg = encodeURIComponent('¡Hola! 💕 Les mando un abrazo enorme y mis mejores deseos para su Boda ✨💍');
+      const greetingMsg = encodeURIComponent('¡Hola Elías y Adriana! 💕 Les mando un abrazo enorme y mis mejores deseos para su Boda ✨💍');
       window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${greetingMsg}`, '_blank');
     });
   }
@@ -602,8 +622,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ? '¡Sí, con mucho gusto estaré presente! 💍🎉' 
       : 'Lamentablemente no podré asistir, pero les deseo toda la felicidad del mundo 💌';
 
-    let whatsappText = `¡Hola! 💕\n` +
-      `Queremos confirmar nuestra asistencia para la Boda 💍✨\n\n` +
+    let whatsappText = `¡Hola Elías y Adriana! 💕\n` +
+      `Queremos confirmar nuestra asistencia para su Boda 💍✨\n\n` +
       `👤 *Nombre y Apellido:* ${fullname}\n` +
       `🎉 *¿Asistirá?:* ${attendanceText}\n`;
 

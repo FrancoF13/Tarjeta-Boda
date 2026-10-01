@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Nuestra Boda | Estás Invitado a Celebrar</title>
+  <title>Elías &amp; Adriana | Nuestra Boda 💍</title>
   <meta name="description"
-    content="Estás invitado a celebrar nuestra boda. Viernes 20 de Noviembre a las 22:00 hs. Acompáñanos a vivir una noche mágica e inolvidable.">
-  <meta property="og:title" content="Estás Invitado a Celebrar Nuestra Boda 💍">
+    content="Estás invitado a celebrar la boda de Elías y Adriana. Viernes 20 de Noviembre a las 22:00 hs. Acompáñanos a celebrar nuestra unión.">
+  <meta property="og:title" content="Boda de Elías &amp; Adriana 💍 | Estás Invitado">
   <meta property="og:description"
     content="Viernes 20 de Noviembre • 22:00 hs. Te esperamos para celebrar este momento tan especial juntos.">
-  <meta property="og:image" content="assets/wax-seal.jpg">
+  <meta property="og:image" content="assets/envelope-gatefold.jpg">
   <meta name="theme-color" content="#dbe7ef">
 
   <!-- Google Fonts de Alta Gama: Cormorant Garamond, Alex Brush, Great Vibes, Cinzel & Montserrat -->
@@ -33,43 +33,75 @@
   <canvas id="particles-canvas"></canvas>
 
   <!-- =========================================================
-       PANTALLA DE APERTURA: SOBRE NUPCIAL 3D REALISTA (ESTILO INSTAGRAM)
-       Sobre en relieve con solapas 3D, tarjeta deslizable y sello de lacre Dusty Blue
+       PANTALLA DE APERTURA: SOBRE NUPCIAL TRÍPTICO / GATEFOLD 3D
+       Inspirado en la invitación física con relieve floral dusty blue,
+       apertura lateral en 3D (se abre por los lados) y gran sello de lacre
+       dorado con las iniciales E y A (Elías & Adriana).
        ========================================================= -->
   <div id="envelope-overlay" class="envelope-overlay">
     <div class="envelope-3d-scene">
-      <div class="envelope-perspective-box" id="envelope-box">
+      
+      <!-- Sobre con perspectiva 3D -->
+      <div class="envelope-gatefold-box" id="envelope-box">
 
-        <!-- Fondo del sobre -->
-        <div class="env-back"></div>
+        <!-- Tarjeta interior con los datos que se presenta al abrirse -->
+        <div class="gatefold-card-inside" id="gatefold-card-inside">
+          <div class="inside-card-frame">
+            <div class="inside-monogram-badge">
+              <span class="inside-monogram-text">E &amp; A</span>
+            </div>
+            
+            <span class="inside-pretitle">INVITACIÓN DE BODA</span>
+            <h2 class="inside-names">Elías &amp; Adriana</h2>
+            
+            <div class="inside-gold-divider">
+              <span class="divider-line"></span>
+              <span class="divider-gem">✦</span>
+              <span class="divider-line"></span>
+            </div>
 
-        <!-- Tarjeta interior que se asoma y desliza en 3D -->
-        <div class="env-inner-card" id="env-card">
-          <div class="env-inner-deckled-border">
-            <span class="env-inner-pretitle">INVITACIÓN DE BODA</span>
-            <div class="env-rings-emblem">💍</div>
-            <h2 class="env-inner-title">Nuestra Boda</h2>
-            <div class="env-inner-divider"></div>
-            <p class="env-inner-date">20 &bull; NOVIEMBRE &bull; 2026</p>
-            <p class="env-inner-time">22:00 HS</p>
+            <p class="inside-quote">
+              “Con la bendición de Dios y de nuestras familias,<br>
+              tenemos la dicha y el honor de invitarte<br>
+              a celebrar nuestra unión.”
+            </p>
+
+            <!-- Datos destacados de la boda -->
+            <div class="inside-details-grid">
+              <div class="inside-detail-card">
+                <span class="detail-label">FECHA</span>
+                <strong class="detail-val">Viernes 20 de Noviembre</strong>
+                <small class="detail-year">2026</small>
+              </div>
+              <div class="inside-detail-card">
+                <span class="detail-label">HORA</span>
+                <strong class="detail-val">22:00 HS</strong>
+                <small class="detail-year">Puntual</small>
+              </div>
+            </div>
+
+            <p class="inside-place-tag">
+              💍 Bienvenidos a nuestra celebración 💍
+            </p>
           </div>
         </div>
 
-        <!-- Solapas laterales y frontal inferior del sobre -->
-        <div class="env-pocket"></div>
-        <div class="env-flap-left"></div>
-        <div class="env-flap-right"></div>
-        <div class="env-flap-bottom"></div>
-
-        <!-- Solapa triangular superior abatible en 3D (rotateX) -->
-        <div class="env-top-flap" id="env-top-flap">
-          <div class="env-flap-triangle"></div>
+        <!-- Solapa Lateral Izquierda (Se abre hacia la izquierda) -->
+        <div class="gatefold-door gatefold-door-left" id="door-left">
+          <div class="door-front door-front-left"></div>
+          <div class="door-back door-back-left"></div>
         </div>
 
-        <!-- Sello de Lacre Dusty Blue con Relieve Dorado -->
-        <div class="env-wax-seal" id="wax-seal-btn" title="Tocar para abrir la invitación">
+        <!-- Solapa Lateral Derecha (Se abre hacia la derecha) -->
+        <div class="gatefold-door gatefold-door-right" id="door-right">
+          <div class="door-front door-front-right"></div>
+          <div class="door-back door-back-right"></div>
+        </div>
+
+        <!-- Sello de Lacre Original Cortado con las Letras Exactas E & A de la Foto -->
+        <div class="env-wax-seal" id="wax-seal-btn" role="button" tabindex="0" aria-label="Tocar el sello para abrir la invitación de Elías y Adriana" title="Tocar el sello para abrir">
           <div class="stamp-glow"></div>
-          <img src="assets/wax-seal.jpg" alt="Sello de Lacre Nupcial" class="wax-seal-img">
+          <img src="assets/real-wax-seal.png" alt="Sello de Lacre Original Elías y Adriana" class="wax-seal-real-img">
         </div>
 
       </div>
@@ -79,7 +111,7 @@
         <button id="open-invitation-btn" class="btn-open-3d">
           <span class="sparkle-icon">✨</span> Tocar el sello para abrir <span class="sparkle-icon">✨</span>
         </button>
-        <p class="envelope-hint">🎵 Toca para activar la Marcha Nupcial</p>
+        <p class="envelope-hint">🎵 Toca para abrir y activar la Marcha Nupcial</p>
       </div>
 
     </div>
@@ -129,7 +161,8 @@
         </div>
 
         <span class="hero-invitation-lead">Estás invitado a celebrar</span>
-        <h1 class="hero-name-gold foil-shimmer">Nuestra Boda</h1>
+        <h1 class="hero-name-gold foil-shimmer">Elías &amp; Adriana</h1>
+        <div class="hero-subbadge-caps">✦ NUESTRA BODA ✦</div>
 
         <div class="gold-divider">
           <span class="divider-line"></span>
@@ -149,7 +182,9 @@
         </div>
 
         <div class="card-monogram-badge">
-          <span>&bull; N &amp; B &bull;</span>
+          <span class="monogram-bullet">✦</span>
+          <span class="monogram-text">E &amp; A</span>
+          <span class="monogram-bullet">✦</span>
         </div>
       </div>
     </header>
@@ -407,7 +442,7 @@
           <span class="divider-line"></span>
         </div>
         <p class="footer-family">¡Los esperamos para celebrar el amor!</p>
-        <p class="footer-hashtag">#NuestraBoda &bull; 20.11.2026</p>
+        <p class="footer-hashtag">#EliasYAdriana &bull; 20.11.2026</p>
         <button id="btn-confetti" class="btn-confetti-burst" title="¡Celebrar!">
           🎉 ¡Celebrar con Nosotros! 🎉
         </button>
@@ -421,7 +456,7 @@
     <div class="modal-card">
       <button class="modal-close-btn" id="calendar-close-btn" aria-label="Cerrar modal">&times;</button>
       <div class="modal-header">
-        <span class="modal-pretitle">NUESTRA BODA</span>
+        <span class="modal-pretitle">BODA DE ELÍAS &amp; ADRIANA</span>
         <h3 class="modal-title">Agendar Evento</h3>
         <p class="modal-desc">Elegí tu calendario preferido para guardar la fecha automáticamente:</p>
       </div>
@@ -457,7 +492,7 @@
     <div class="modal-card">
       <button class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar modal">&times;</button>
       <div class="modal-header">
-        <span class="modal-pretitle">NUESTRA BODA</span>
+        <span class="modal-pretitle">BODA DE ELÍAS &amp; ADRIANA</span>
         <h3 class="modal-title">Confirmar Asistencia</h3>
         <p class="modal-desc">Completá tus datos para avisarnos directamente por WhatsApp</p>
       </div>
@@ -514,7 +549,7 @@
     <div class="modal-card">
       <button class="modal-close-btn" id="song-close-btn" aria-label="Cerrar modal">&times;</button>
       <div class="modal-header">
-        <span class="modal-pretitle">PLAYLIST DE LA BODA</span>
+        <span class="modal-pretitle">BODA DE ELÍAS &amp; ADRIANA</span>
         <h3 class="modal-title">Sugerir Canción</h3>
         <p class="modal-desc">¿Qué canción no puede faltar en la fiesta para bailar?</p>
       </div>
